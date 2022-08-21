@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MenuForm</class>
+ <widget class="QWidget" name="MenuForm">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>390</width>
+    <height>345</height>
+   </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>0</width>
+    <height>0</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>16777200</width>
+    <height>16777215</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <property name="layoutDirection">
+   <enum>Qt::LeftToRight</enum>
+  </property>
+  <property name="autoFillBackground">
+   <bool>false</bool>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout_2">
+   <property name="spacing">
+    <number>0</number>
+   </property>
+   <property name="sizeConstraint">
+    <enum>QLayout::SetDefaultConstraint</enum>
+   </property>
+   <property name="bottomMargin">
+    <number>11</number>
+   </property>
+   <item>
+    <layout class="QVBoxLayout" name="buttonsVerticalLayout">
+     <property name="spacing">
+      <number>7</number>
+     </property>
+     <property name="sizeConstraint">
+      <enum>QLayout::SetDefaultConstraint</enum>
+     </property>
+     <property name="leftMargin">
+      <number>100</number>
+     </property>
+     <property name="rightMargin">
+      <number>100</number>
+     </property>
+     <item>
+      <widget class="QPushButton" name="TestingButton">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+         <horstretch>32</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>Start Testing</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="addQuestionButton">
+       <property name="text">
+        <string>Add Question</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="questionsTableButton">
+       <property name="text">
+        <string>Questions List</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="quitButton">
+       <property name="text">
+        <string>Quit</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="aboutButton">
+       <property name="text">
+        <string>About</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>quitButton</sender>
+   <signal>clicked()</signal>
+   <receiver>MenuForm</receiver>
+   <slot>quit()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>278</x>
+     <y>244</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>474</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>aboutButton</sender>
+   <signal>clicked()</signal>
+   <receiver>MenuForm</receiver>
+   <slot>about()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>229</x>
+     <y>286</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>480</x>
+     <y>176</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>TestingButton</sender>
+   <signal>clicked()</signal>
+   <receiver>MenuForm</receiver>
+   <slot>startTesting()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>278</x>
+     <y>64</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>491</x>
+     <y>98</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>questionsTableButton</sender>
+   <signal>clicked()</signal>
+   <receiver>MenuForm</receiver>
+   <slot>questionTable()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>278</x>
+     <y>184</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>619</x>
+     <y>144</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>addQuestionButton</sender>
+   <signal>clicked()</signal>
+   <receiver>MenuForm</receiver>
+   <slot>addQuestionButton()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>278</x>
+     <y>124</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>439</x>
+     <y>195</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>quit()</slot>
+  <slot>about()</slot>
+  <slot>startTesting()</slot>
+  <slot>questionTable()</slot>
+  <slot>addQuestionButton()</slot>
+ </slots>
+</ui>

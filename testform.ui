@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>TestForm</class>
+ <widget class="QWidget" name="TestForm">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>646</width>
+    <height>567</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <widget class="QWidget" name="verticalLayoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>19</x>
+     <y>19</y>
+     <width>611</width>
+     <height>531</height>
+    </rect>
+   </property>
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <layout class="QHBoxLayout" name="buttonHorizontalLayout">
+      <property name="sizeConstraint">
+       <enum>QLayout::SetDefaultConstraint</enum>
+      </property>
+      <item>
+       <widget class="QPushButton" name="menuPushButton">
+        <property name="text">
+         <string>Menu</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QPushButton" name="nextPushButton">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="text">
+         <string>Next</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>menuPushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>TestForm</receiver>
+   <slot>BackToMenu()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>70</x>
+     <y>416</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-9</x>
+     <y>380</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>nextPushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>TestForm</receiver>
+   <slot>NextQuestion()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>588</x>
+     <y>414</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>748</x>
+     <y>356</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>nextPushButton</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>nextPushButton</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>566</x>
+     <y>421</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>608</x>
+     <y>426</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>nextPushButton</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>TestForm</receiver>
+   <slot>CheckQuestionState()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>551</x>
+     <y>414</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>733</x>
+     <y>485</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>nextPushButton</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>TestForm</receiver>
+   <slot>CheckQuestionState()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>584</x>
+     <y>425</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>694</x>
+     <y>493</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>BackToMenu()</slot>
+  <slot>NextQuestion()</slot>
+  <slot>CheckQuestionState()</slot>
+ </slots>
+</ui>
