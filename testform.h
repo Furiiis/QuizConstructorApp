@@ -23,6 +23,9 @@ public slots:
     void CheckQuestionState() const;
 
 private:
+    bool IsNextQuestionLast() const; //RENAME
+
+private:
     Ui::TestForm *ui;
     TestWindowForm* questionWidget;
     TestSessionData _sessionData;

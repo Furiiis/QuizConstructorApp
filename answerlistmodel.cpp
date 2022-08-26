@@ -22,11 +22,11 @@ AnswerListModel::AnswerListModel() : QAbstractListModel()
 //  answers_.push_back({item, Qt::Unchecked});
 }
 
-AnswerListModel::AnswerListModel(const std::vector<Answer> &answers) : QAbstractListModel()
+AnswerListModel::AnswerListModel(const std::vector<Answer>& answers, bool answers_visible) : QAbstractListModel()
 {
     for(const auto& answer : answers)
     {
-        if(answer.isRightAnswer)
+        if(answer.isRightAnswer && answers_visible)
             answers_.push_back({answer, Qt::Checked});
         else
             answers_.push_back({answer, Qt::Unchecked});

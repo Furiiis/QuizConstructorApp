@@ -27,9 +27,11 @@ public:
     Question getQuestion(const int id);
     std::vector<Answer> getAnswers(const int id);
     void addQuestion(const Question& question);
-    void deleteQuestion(const int id);
+    void deleteQuestion(const int question_id);
     void updateQuestion(const Question& question);
     std::vector<Tag> getAllTags();
+    std::vector<Tag> getQuestionTags(const int question_id);
+    std::vector<Tag> getAllTagsExceptQuestions(const int question_id);
 
 private:
     explicit DatabaseManager(QObject *parent = nullptr);
@@ -38,6 +40,10 @@ private:
     Tag hydrateTag(QSqlQuery &query);
     void addAnswers(const std::vector<Answer>& answers, const int question_index);
     void updateAnswers(const std::vector<Answer>& answers, const int question_index);
+    void deleteAnswers(const std::vector<int>& id_answers);
+    void updateTags(const std::vector<Tag>& tags_to_update, const int question_id);
+    void deleteQuestionsTags(const std::vector<Tag>& tags_to_delete, const int question_id);
+    void insertQuestionsTags(const std::vector<Tag>& tags_to_insert, const int question_id);
 
 private:
     QSqlDatabase m_db;

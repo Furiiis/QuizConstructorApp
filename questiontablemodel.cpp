@@ -27,7 +27,7 @@ QVariant QuestionTableModel::data(const QModelIndex &index, int role) const
             return QVariant();
         }
         if (index.column() == 0) {
-            return QVariant();
+            return _questions[index.row()].number_;
         } else if (index.column() == 1) {
             return _questions[index.row()].question_;
         } else if (index.column() == 2) {
@@ -57,4 +57,9 @@ QVariant QuestionTableModel::headerData(int section, Qt::Orientation orientation
 Question QuestionTableModel::GetQuestion(const QModelIndex &index) const
 {
     return _questions[index.row()];
+}
+
+bool QuestionTableModel::setData(const QModelIndex &index, const QVariant &value, int role)
+{
+
 }

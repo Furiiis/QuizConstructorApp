@@ -6,10 +6,12 @@
 #include <QWidget>
 #include <QVBoxLayout>
 #include <QPushButton>
+#include <QDialog>
 #include "readableanswerlistmodel.h"
 #include "testpagemodel.h"
 #include "question.h"
 #include "qt_stackwidget.h"
+#include "taglistmodel.h"
 
 namespace Ui {
 class TestWindowForm;
@@ -28,12 +30,14 @@ public slots:
     void CheckAnswers();
     void Back() const;
     bool IsChecked() const;
+    void RunTagsDialog();
 
 signals:
     void SignalFromCheckButton();
 
 protected:
    TestPageModel* _test_window;
+   TagListModel* tags_model;
    ReadableAnswerListModel* answers_model;
 
 public:

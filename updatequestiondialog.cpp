@@ -3,7 +3,6 @@
 #include "ui_editablequestiondialog.h"
 #include "question.h"
 
-
 UpdateQuestionDialog::UpdateQuestionDialog(const Question &question, QWidget *parent) :
      EditableQuestionDialog(parent, question)
 {
@@ -16,7 +15,7 @@ UpdateQuestionDialog::~UpdateQuestionDialog()
 }
 
 void UpdateQuestionDialog::UpdateQuestionToDb() const {
-    DatabaseManager::instance().updateQuestion(Question(ui->questionNumberLabel->text().toInt(), ui->questionTextEdit->toPlainText(),
+    DatabaseManager::instance().updateQuestion(Question{ui->questionNumberLabel->text().toInt(), ui->questionTextEdit->toPlainText(),
                                       answers_->getAnswers(),ui->descriptionTextEdit->toPlainText(),
-                                                        ui->sourceTextEdit->toPlainText()));
+                                      ui->sourceTextEdit->toPlainText(), tagsDialog->GetSelectedTags()});
 }

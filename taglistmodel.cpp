@@ -126,3 +126,8 @@ std::vector<Tag> TagListModel::getTags() const
 {
     return tags_;
 }
+
+void TagListModel::clear()
+{
+    tags_.clear();
+}

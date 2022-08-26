@@ -1,7 +1,6 @@
 #ifndef QLISTMODEL_H
 #define QLISTMODEL_H
 
-#pragma once
 #include <QAbstractListModel>
 #include <vector>
 #include "answer.h"
@@ -12,7 +11,7 @@ class AnswerListModel : public QAbstractListModel
 
 public:
   AnswerListModel();
-  AnswerListModel(const std::vector<Answer>& answers);
+  AnswerListModel(const std::vector<Answer>& answers, bool answers_visible = true);
 
   virtual int rowCount(const QModelIndex& parent) const;
 //  virtual QVariant data(const QModelIndex& index, int role) const = 0;
@@ -20,6 +19,8 @@ public:
 //  virtual bool setData(const QModelIndex & index, const QVariant & value, int role);
 
   std::vector<Answer> getAnswers() const;
+
+  virtual ~AnswerListModel() {}
 
 protected:
   std::vector<std::pair<Answer, Qt::CheckState>> answers_;

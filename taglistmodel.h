@@ -11,12 +11,6 @@ class TagListModel : public QAbstractListModel
 {
     Q_OBJECT
 
-//    struct TagCheckBox
-//    {
-//        Tag tag;
-//        Qt::CheckState state;
-//    };
-
 public:
   TagListModel();
   TagListModel(const std::vector<Tag>& tags);
@@ -61,6 +55,7 @@ public:
   std::vector<Tag> takeItemTags(const QModelIndexList& indexlist);
   void pushBackItemTag(const Tag& tag);
   std::vector<Tag> getTags() const;
+  void clear();
 };
 
 Q_DECLARE_METATYPE(TagListModel)

@@ -19,7 +19,6 @@ QuestionTableForm::QuestionTableForm(QWidget *parent) :
 QuestionTableForm::~QuestionTableForm()
 {
     delete ui;
-    delete question_model;
 }
 
 void QuestionTableForm::Back() const
@@ -38,13 +37,19 @@ void QuestionTableForm::EditQuestion()
      * к слоту обновления вида модели представления данных, но передаём
      * в качестве параметров строку записи
      * */
+    QModelIndex index = ui->tableView->selectionModel()->currentIndex();
+
     UpdateQuestionDialog *updateDialog = new UpdateQuestionDialog(
                 question_model->GetQuestion(ui->tableView->selectionModel()->currentIndex()));
+
     connect(updateDialog, SIGNAL(signalReady()), this, SLOT(slotUpdateModels()));
 
     /* Выполняем запуск диалогового окна
      * */
     updateDialog->exec();
+
+    emit ui->tableView->model()->dataChanged(ui->tableView->model()->index(index.row() - 1, 0),
+                                    ui->tableView->model()->index(index.row() - 1, 3));
 }
 
 void QuestionTableForm::RemoveQuestion()

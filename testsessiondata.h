@@ -9,7 +9,6 @@ struct TestSessionData
 {
     std::vector<Question> questions;
     std::vector<Tag> tags;
-
 };
 
 #endif // TESTSESSIONDATA_H

@@ -13,55 +13,49 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <widget class="QWidget" name="verticalLayoutWidget">
-   <property name="geometry">
-    <rect>
-     <x>19</x>
-     <y>19</y>
-     <width>611</width>
-     <height>531</height>
-    </rect>
-   </property>
-   <layout class="QVBoxLayout" name="verticalLayout">
-    <item>
-     <layout class="QHBoxLayout" name="buttonHorizontalLayout">
-      <property name="sizeConstraint">
-       <enum>QLayout::SetDefaultConstraint</enum>
-      </property>
-      <item>
-       <widget class="QPushButton" name="menuPushButton">
-        <property name="text">
-         <string>Menu</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <spacer name="horizontalSpacer">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item>
-       <widget class="QPushButton" name="nextPushButton">
-        <property name="enabled">
-         <bool>false</bool>
-        </property>
-        <property name="text">
-         <string>Next</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
-   </layout>
-  </widget>
+  <layout class="QVBoxLayout" name="verticalLayout_2">
+   <item>
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
+      <layout class="QHBoxLayout" name="buttonHorizontalLayout">
+       <property name="sizeConstraint">
+        <enum>QLayout::SetDefaultConstraint</enum>
+       </property>
+       <item>
+        <widget class="QPushButton" name="menuPushButton">
+         <property name="text">
+          <string>Menu</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QPushButton" name="nextPushButton">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="text">
+          <string>Next</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </item>
+  </layout>
  </widget>
  <resources/>
  <connections>
@@ -72,8 +66,8 @@
    <slot>BackToMenu()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>70</x>
-     <y>416</y>
+     <x>72</x>
+     <y>296</y>
     </hint>
     <hint type="destinationlabel">
      <x>-9</x>
@@ -88,8 +82,8 @@
    <slot>NextQuestion()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>588</x>
-     <y>414</y>
+     <x>627</x>
+     <y>296</y>
     </hint>
     <hint type="destinationlabel">
      <x>748</x>
@@ -104,12 +98,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>566</x>
-     <y>421</y>
+     <x>627</x>
+     <y>296</y>
     </hint>
     <hint type="destinationlabel">
-     <x>608</x>
-     <y>426</y>
+     <x>627</x>
+     <y>296</y>
     </hint>
    </hints>
   </connection>
@@ -120,8 +114,8 @@
    <slot>CheckQuestionState()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>551</x>
-     <y>414</y>
+     <x>627</x>
+     <y>296</y>
     </hint>
     <hint type="destinationlabel">
      <x>733</x>
@@ -136,8 +130,8 @@
    <slot>CheckQuestionState()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>584</x>
-     <y>425</y>
+     <x>627</x>
+     <y>296</y>
     </hint>
     <hint type="destinationlabel">
      <x>694</x>

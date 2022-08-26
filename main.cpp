@@ -1,8 +1,6 @@
-#include "mainwindow.h"
 #include "testwindowform.h"
 
 #include <QApplication>
-
 #include <QWidget>
 #include <QFrame>
 #include <QGridLayout>

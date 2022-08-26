@@ -69,6 +69,7 @@ std::vector<Question> DatabaseManager::getAllQuestions()
     while(l_query.next())
     {
         questions.push_back(hydrateQuestion(l_query));
+        questions.back().tags_ = getQuestionTags(questions.back().number_);
     }
 
     return questions;
@@ -94,6 +95,7 @@ std::vector<Question> DatabaseManager::getQuestions(const int limit)
     while(l_query.next())
     {
         questions.push_back(hydrateQuestion(l_query));
+        questions.back().tags_ = getQuestionTags(questions.back().number_);
     }
 
     return questions;
@@ -107,16 +109,15 @@ std::vector<Question> DatabaseManager::getQuestions(const int limit, const std::
     foreach(Tag tag, tags) {
         idstrings << QString::number(tag.id);
     }
-    QString idlist = idstrings.join(",");
+//    QString idlist = idstrings.join(" , ");
 
-    l_query.prepare("SELECT * FROM questions "
+    l_query.prepare(QString("SELECT * FROM questions "
                     "where questionNumber in "
                     "( select DISTINCT question_id from questions_tags_mapper  "
-                    "where tag_id in :id_list ) "
-                    "limit :limit;" );
+                    "where tag_id in (%1) ) "
+                    "limit :limit;").arg(idstrings.join(" , ")));
 
     l_query.bindValue(":limit", limit);
-    l_query.bindValue(":id_list", idlist);
 
     if (!l_query.exec())
     {
@@ -129,6 +130,7 @@ std::vector<Question> DatabaseManager::getQuestions(const int limit, const std::
     while(l_query.next())
     {
         questions.push_back(hydrateQuestion(l_query));
+        questions.back().tags_ = getQuestionTags(questions.back().number_);
     }
 
     return questions;
@@ -150,7 +152,9 @@ Question DatabaseManager::getQuestion(const int id)
 //        Macaw::DEBUG(l_query.lastError().text());
     }
     if(!l_query.first()) return Question();
-    return hydrateQuestion(l_query);
+    Question question = hydrateQuestion(l_query);
+    question.tags_ = getQuestionTags(question.number_);
+    return question;
 }
 
 std::vector<Answer> DatabaseManager::getAnswers(const int id)
@@ -209,7 +213,9 @@ void DatabaseManager::addQuestion(const Question &question)
         return;
     }
 
-    addAnswers(question.answers_, l_query.value(0).toInt());
+    int question_id = l_query.value(0).toInt();
+    addAnswers(question.answers_, question_id);
+    insertQuestionsTags(question.tags_, question_id);
 }
 
 void DatabaseManager::deleteQuestion(const int id)
@@ -248,6 +254,7 @@ void DatabaseManager::updateQuestion(const Question &question)
     }
 
     updateAnswers(question.answers_, question.number_);
+    updateTags(question.tags_, question.number_);
 }
 
 std::vector<Tag> DatabaseManager::getAllTags()
@@ -261,6 +268,64 @@ std::vector<Tag> DatabaseManager::getAllTags()
     {
        QString err_str = l_query.lastError().text();
        std::cerr << "Error in DatabaseManager::getAllTags()"<< std::endl;
+//        Macaw::DEBUG(l_query.lastError().text());
+    }
+
+    std::vector<Tag> tags;
+
+    while(l_query.next())
+    {
+        tags.push_back(hydrateTag(l_query));
+    }
+
+    return tags;
+}
+
+std::vector<Tag> DatabaseManager::getQuestionTags(const int question_id)
+{
+    QSqlQuery l_query(m_db);
+
+    l_query.prepare("SELECT t.tag_id, t.name "
+                    "FROM questions_tags_mapper as qtm "
+                    "INNER JOIN tags AS t "
+                    "ON t.tag_id = qtm.tag_id "
+                    "WHERE qtm.question_id = :question_id;");
+
+    l_query.bindValue(":question_id", question_id);
+
+    if (!l_query.exec())
+    {
+       QString err_str = l_query.lastError().text();
+       std::cerr << "Error in DatabaseManager::getQuestionTags(const int question_id)"<< std::endl;
+//        Macaw::DEBUG(l_query.lastError().text());
+    }
+
+    std::vector<Tag> tags;
+
+    while(l_query.next())
+    {
+        tags.push_back(hydrateTag(l_query));
+    }
+
+    return tags;
+}
+
+std::vector<Tag> DatabaseManager::getAllTagsExceptQuestions(const int question_id)
+{
+    QSqlQuery l_query(m_db);
+
+    l_query.prepare("SELECT t.tag_id, t.name "
+                    "FROM tags t "
+                    "WHERE t.tag_id NOT IN "
+                    "( SELECT qtm.tag_id FROM questions_tags_mapper qtm "
+                    "WHERE qtm.question_id = :question_id ); ");
+
+    l_query.bindValue(":question_id", question_id);
+
+    if (!l_query.exec())
+    {
+       QString err_str = l_query.lastError().text();
+       std::cerr << "Error in DatabaseManager::getAllTagsExceptQuestions(const int question_id)"<< std::endl;
 //        Macaw::DEBUG(l_query.lastError().text());
     }
 
@@ -296,6 +361,23 @@ void DatabaseManager::addAnswers(const std::vector<Answer> &answers, const int q
 
 void DatabaseManager::updateAnswers(const std::vector<Answer>& answers, const int question_index)
 {
+    std::vector<int> answers_ids_to_delete;
+    foreach( const Answer& answer, getAnswers(question_index))
+    {
+        if(answer.id == 0) continue;
+        bool k = false;
+        foreach(const Answer& new_answer, answers)
+        {
+            if(new_answer.id == answer.id)
+            {
+                k = true;
+                break;
+            }
+        }
+        if(k == false) answers_ids_to_delete.push_back(answer.id);
+    }
+    deleteAnswers(answers_ids_to_delete);
+
     QSqlQuery l_query(m_db);
     std::vector<Answer> answers_to_select;
     for(const auto& answer : answers)
@@ -324,6 +406,107 @@ void DatabaseManager::updateAnswers(const std::vector<Answer>& answers, const in
     }
 
     addAnswers(answers_to_select, question_index);
+}
+
+void DatabaseManager::deleteAnswers(const std::vector<int> &id_answers)
+{
+    QSqlQuery l_query(m_db);
+
+    QStringList idstrings;
+    foreach(int id, id_answers) {
+        idstrings << QString::number(id);
+    }
+
+    l_query.prepare(QString("DELETE FROM answers "
+                    "WHERE id IN (%1) ").arg(idstrings.join(" , ")));
+
+    if (!l_query.exec())
+    {
+       QString err_str = l_query.lastError().text();
+       std::cerr << "Error in DatabaseManager::deleteAnswers(const std::vector<int> &id_answers)" << std::endl;
+    }
+}
+
+void DatabaseManager::updateTags(const std::vector<Tag> &tags_to_update, const int question_id)
+{
+   std::vector<Tag> to_delete;
+   std::vector<Tag> to_insert;
+   foreach(const Tag& new_tag, tags_to_update)
+   {
+       bool is_in_old_tags = false;
+       foreach(const Tag& old_tag, getQuestionTags(question_id))
+       {
+           if(old_tag.id == new_tag.id)
+           {
+               is_in_old_tags = true;
+               break;
+           }
+       }
+       if(is_in_old_tags == false)
+       {
+           to_insert.push_back(new_tag);
+       }
+   }
+
+   foreach(const Tag& old_tag, getQuestionTags(question_id))
+   {
+       bool is_in_new_tags = false;
+       foreach(const Tag& new_tag, tags_to_update)
+       {
+           if(old_tag.id == new_tag.id)
+           {
+               is_in_new_tags = true;
+               break;
+           }
+       }
+       if(is_in_new_tags == false)
+       {
+           to_delete.push_back(old_tag);
+       }
+   }
+
+   deleteQuestionsTags(to_delete, question_id);
+   insertQuestionsTags(to_insert, question_id);
+}
+
+void DatabaseManager::deleteQuestionsTags(const std::vector<Tag>& tags_to_delete, const int question_id)
+{
+    QSqlQuery l_query(m_db);
+
+    QStringList idstrings;
+    foreach(const Tag& tag, tags_to_delete) {
+        idstrings << QString::number(tag.id);
+    }
+
+    l_query.prepare(QString("DELETE FROM questions_tags_mapper "
+                    "WHERE tag_id IN (%1) AND question_id = :question_id")
+                    .arg(idstrings.join(" , ")));
+    l_query.bindValue(":question_id", question_id);
+
+    if (!l_query.exec())
+    {
+       QString err_str = l_query.lastError().text();
+       std::cerr << "Error in DatabaseManager::deleteQuestionsTags(const std::vector<Tag>& tags_to_delete, const int question_id)" << std::endl;
+    }
+}
+
+void DatabaseManager::insertQuestionsTags(const std::vector<Tag> &tags_to_insert, const int question_id)
+{
+    QSqlQuery l_query(m_db);
+    for(const auto& tag : tags_to_insert)
+    {
+        l_query.clear();
+        l_query.prepare("insert into questions_tags_mapper (question_id, tag_id) "
+                        "VALUES (:question_id, :tag_id) ");
+        l_query.bindValue(":question_id", question_id);
+        l_query.bindValue(":tag_id", tag.id);
+
+        if(!l_query.exec())
+        {
+           std::cerr << "DatabaseManager::insertQuestionsTags(const std::vector<Tag> &tags_to_insert, const int question_id)" << std::endl;
+           return;
+        }
+    }
 }
 
 DatabaseManager::DatabaseManager(QObject *parent) : QObject(parent)

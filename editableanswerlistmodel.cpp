@@ -6,7 +6,7 @@ EditableAnswerListModel::EditableAnswerListModel()
 }
 
 EditableAnswerListModel::EditableAnswerListModel(const std::vector<Answer> &answers)
-    : AnswerListModel(answers)
+    : AnswerListModel(answers, true)
 {
 
 }

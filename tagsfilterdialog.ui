@@ -19,7 +19,14 @@
      <item>
       <layout class="QVBoxLayout" name="DefaultTagsVerticalLayout">
        <item>
-        <widget class="QListView" name="defaultTagsListView"/>
+        <widget class="QListView" name="defaultTagsListView">
+         <property name="selectionMode">
+          <enum>QAbstractItemView::MultiSelection</enum>
+         </property>
+         <property name="selectionRectVisible">
+          <bool>true</bool>
+         </property>
+        </widget>
        </item>
        <item>
         <layout class="QHBoxLayout" name="buttonsDefaultHorizontalLayout">
@@ -51,7 +58,14 @@
      <item>
       <layout class="QVBoxLayout" name="selectedTagsVerticalLayout">
        <item>
-        <widget class="QListView" name="selectedTagsListView"/>
+        <widget class="QListView" name="selectedTagsListView">
+         <property name="selectionMode">
+          <enum>QAbstractItemView::MultiSelection</enum>
+         </property>
+         <property name="selectionRectVisible">
+          <bool>true</bool>
+         </property>
+        </widget>
        </item>
        <item>
         <layout class="QHBoxLayout" name="buttonsSelectedHorizontalLayout">

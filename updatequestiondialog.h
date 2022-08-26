@@ -17,7 +17,6 @@ public:
 
 public slots:
     void UpdateQuestionToDb() const;
-
 };
 
 #endif // UPDATEQUESTIONDIALOG_H

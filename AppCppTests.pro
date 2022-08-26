@@ -19,7 +19,6 @@ SOURCES += \
     main.cpp \
     menuform.cpp \
     qt_stackwidget.cpp \
-    question.cpp \
     questiontableform.cpp \
     questiontablemodel.cpp \
     readableanswerlistmodel.cpp \

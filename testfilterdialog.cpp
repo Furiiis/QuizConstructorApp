@@ -10,7 +10,7 @@ TestFilterDialog::TestFilterDialog(QWidget *parent) :
     ui(new Ui::TestFilterDialog)
 {
     ui->setupUi(this);
-    tagsDialog = new TagsFilterDialog();
+    tagsDialog = new TagsFilterDialog(parent, DatabaseManager::instance().getAllTags());
 //    ui->tagsComboBox->setModel( new TagListModel(DatabaseManager::instance().getAllTags()) );
     connect(ui->tagsPushButton, SIGNAL(clicked()), this, SLOT(OpenTagsFilterDialog()));
 }

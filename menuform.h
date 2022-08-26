@@ -19,6 +19,7 @@ class MenuForm : public QWidget
 public:
     explicit MenuForm(QWidget *parent = nullptr);
     ~MenuForm();
+
 public slots:
     void quit() const;
     void about() const;

@@ -36,8 +36,8 @@
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>809</width>
-          <height>288</height>
+          <width>813</width>
+          <height>291</height>
          </rect>
         </property>
         <property name="autoFillBackground">
@@ -122,6 +122,13 @@
         <number>0</number>
        </property>
        <item>
+        <widget class="QPushButton" name="tagsPushButton">
+         <property name="text">
+          <string>Tags</string>
+         </property>
+        </widget>
+       </item>
+       <item>
         <spacer name="horizontalSpacer">
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
@@ -191,8 +198,8 @@
    <slot>doItemsLayout()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>798</x>
-     <y>673</y>
+     <x>821</x>
+     <y>699</y>
     </hint>
     <hint type="destinationlabel">
      <x>704</x>

@@ -26,6 +26,10 @@ private:
     std::vector<Question> _questions;
 
 
+
+    // QAbstractItemModel interface
+public:
+    bool setData(const QModelIndex &index, const QVariant &value, int role);
 };
 
 #endif // QUESTIONTABLEMODEL_H

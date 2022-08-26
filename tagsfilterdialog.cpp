@@ -1,28 +1,109 @@
 #include "tagsfilterdialog.h"
 #include "ui_tagsfilterdialog.h"
 
+namespace  {
+    void moveSelectedTagItems(TagListModel* from_list,
+                          TagListModel* to_list, QItemSelectionModel* selectionModel)
+{
+            if(selectionModel->hasSelection())
+            {
+                foreach(const QModelIndex & modelIndex, selectionModel->selectedIndexes())
+                {
+                    to_list->pushBackItemTag(from_list->takeItemTag(modelIndex));
+                }
+            }
+            from_list->takeItemTags(selectionModel->selectedIndexes());
+}
 
-TagsFilterDialog::TagsFilterDialog(QWidget *parent) :
-    QDialog(parent),
-    ui(new Ui::TagsFilterDialog)
+     void moveAllTagItems(TagListModel* from_list,  TagListModel* to_list)
+     {
+         foreach(const Tag& tag, from_list->getTags())
+         {
+             to_list->pushBackItemTag(tag);
+         }
+
+         from_list->clear();
+     }
+}
+
+//TagsFilterDialog::TagsFilterDialog(QWidget *parent) :
+//    QDialog(parent),
+//    ui(new Ui::TagsFilterDialog)
+//{
+//    ui->setupUi(this);
+//    defaultTags = new TagListModel(DatabaseManager::instance().getAllTags());
+//    selectedTags = new TagListModel();
+//    ui->defaultTagsListView->setModel(defaultTags);
+//    ui->selectedTagsListView->setModel(selectedTags);
+
+//connect(ui->moveToSelectedPushButton, SIGNAL(clicked()), this,
+//        SLOT(MoveTagsFromDefaultToSelected()));
+//connect(ui->moveToDefaultPushButton, SIGNAL(clicked()), this,
+//        SLOT(MoveTagsFromSelectedToDefault()));
+//connect(ui->moveAllToSelectedPushButton, SIGNAL(clicked()), this,
+//        SLOT(MoveAllTagsToSelected()));
+//connect(ui->moveAllToDefaultPushButton, SIGNAL(clicked()), this,
+//        SLOT(MoveAllTagsToDefault()));
+//}
+
+//TagsFilterDialog::TagsFilterDialog(QWidget *parent, const std::vector<Tag> &default_tags) :
+//    QDialog(parent),
+//    ui(new Ui::TagsFilterDialog)
+//{
+//    ui->setupUi(this);
+//    defaultTags = new TagListModel(default_tags);
+//    selectedTags = new TagListModel();
+//    ui->defaultTagsListView->setModel(defaultTags);
+//    ui->selectedTagsListView->setModel(selectedTags);
+
+//connect(ui->moveToSelectedPushButton, SIGNAL(clicked()), this,
+//        SLOT(MoveTagsFromDefaultToSelected()));
+//connect(ui->moveToDefaultPushButton, SIGNAL(clicked()), this,
+//        SLOT(MoveTagsFromSelectedToDefault()));
+//connect(ui->moveAllToSelectedPushButton, SIGNAL(clicked()), this,
+//        SLOT(MoveAllTagsToSelected()));
+//connect(ui->moveAllToDefaultPushButton, SIGNAL(clicked()), this,
+//        SLOT(MoveAllTagsToDefault()));
+//}
+
+//TagsFilterDialog::TagsFilterDialog(QWidget *parent, const std::vector<Tag> &default_tags,
+//                                   const std::vector<Tag> &selected_tags)
+//{
+//    ui->setupUi(this);
+//    defaultTags = new TagListModel(default_tags);
+//    selectedTags = new TagListModel();
+//    ui->defaultTagsListView->setModel(defaultTags);
+//    ui->selectedTagsListView->setModel(selectedTags);
+
+//connect(ui->moveToSelectedPushButton, SIGNAL(clicked()), this,
+//        SLOT(MoveTagsFromDefaultToSelected()));
+//connect(ui->moveToDefaultPushButton, SIGNAL(clicked()), this,
+//        SLOT(MoveTagsFromSelectedToDefault()));
+//connect(ui->moveAllToSelectedPushButton, SIGNAL(clicked()), this,
+//        SLOT(MoveAllTagsToSelected()));
+//connect(ui->moveAllToDefaultPushButton, SIGNAL(clicked()), this,
+//        SLOT(MoveAllTagsToDefault()));
+//}
+
+TagsFilterDialog::TagsFilterDialog(QWidget *parent, const std::vector<Tag>& default_tags,
+                          const std::vector<Tag>& selected_tags) :
+        QDialog(parent),
+        ui(new Ui::TagsFilterDialog)
 {
     ui->setupUi(this);
-    defaultTags = new TagListModel(DatabaseManager::instance().getAllTags());
-    selectedTags = new TagListModel();
+    defaultTags = new TagListModel(default_tags);
+    selectedTags = new TagListModel(selected_tags);
     ui->defaultTagsListView->setModel(defaultTags);
     ui->selectedTagsListView->setModel(selectedTags);
 
-//    SelectionCopier* models_copier = new SelectionCopier(ui->defaultTagsListView, ui->selectedTagsListView);
-//    connect(ui->moveToSelectedPushButton, SIGNAL(clicked()), models_copier, SLOT(copySelection()));
-
-connect(ui->moveToSelectedPushButton, SIGNAL(clicked()), this, SLOT(methods()));
-
-//    connect(ui->moveToSelectedPushButton, SIGNAL(clicked()),
-//            ui->defaultTagsListView, SLOT(onSelectedItemsChanged(QItemSelection, QItemSelection)));
-//    connect(ui->moveToSelectedPushButton, SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
-//            m_myModel, SLOT(onSelectedItemsChanged(QItemSelection, QItemSelection)));
-//    connect(ui->defaultTagsListView, SIGNAL(sendTag(Tag item)),
-//            ui->selectedTagsListView, SLOT(GetSelectedTag(Tag item)));
+connect(ui->moveToSelectedPushButton, SIGNAL(clicked()), this,
+        SLOT(MoveTagsFromDefaultToSelected()));
+connect(ui->moveToDefaultPushButton, SIGNAL(clicked()), this,
+        SLOT(MoveTagsFromSelectedToDefault()));
+connect(ui->moveAllToSelectedPushButton, SIGNAL(clicked()), this,
+        SLOT(MoveAllTagsToSelected()));
+connect(ui->moveAllToDefaultPushButton, SIGNAL(clicked()), this,
+        SLOT(MoveAllTagsToDefault()));
 }
 
 TagsFilterDialog::~TagsFilterDialog()
@@ -35,22 +116,34 @@ std::vector<Tag> TagsFilterDialog::GetSelectedTags() const
     return selectedTags->getTags();
 }
 
-void TagsFilterDialog::methods()
+void TagsFilterDialog::MoveTagsFromDefaultToSelected()
 {
-    QItemSelectionModel * selectionModel = ui->defaultTagsListView->selectionModel();
+    moveSelectedTagItems(defaultTags, selectedTags,
+                         ui->defaultTagsListView->selectionModel());
+    UpdateViews();
+}
 
-            if(selectionModel->hasSelection())
-            {
-                foreach(const QModelIndex & modelIndex, selectionModel->selectedIndexes())
-                {
-//                    ui->selectedTagsListView->model()->insertRow(ui->selectedTagsListView->model()->rowCount(), modelIndex);
-//                    ui->selectedTagsListView->currentIndex();
+void TagsFilterDialog::MoveTagsFromSelectedToDefault()
+{
+    moveSelectedTagItems(selectedTags, defaultTags,
+                         ui->selectedTagsListView->selectionModel());
+    UpdateViews();
+}
 
-//                    ui->selectedTagsListView->model()->setData( QModelIndex(),
-//                                                               defaultTags->getItemTag(modelIndex));
-                    selectedTags->pushBackItemTag(defaultTags->takeItemTag(modelIndex));
-                    ui->selectedTagsListView->doItemsLayout();
-                }
-            }
-            defaultTags->takeItemTags(selectionModel->selectedIndexes());
+void TagsFilterDialog::MoveAllTagsToSelected()
+{
+    moveAllTagItems(defaultTags, selectedTags);
+    UpdateViews();
+}
+
+void TagsFilterDialog::MoveAllTagsToDefault()
+{
+    moveAllTagItems(selectedTags, defaultTags);
+    UpdateViews();
+}
+
+void TagsFilterDialog::UpdateViews() const
+{
+    ui->selectedTagsListView->doItemsLayout();
+    ui->defaultTagsListView->doItemsLayout();
 }

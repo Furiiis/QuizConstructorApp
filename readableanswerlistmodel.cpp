@@ -7,7 +7,7 @@ ReadableAnswerListModel::ReadableAnswerListModel()
 }
 
 ReadableAnswerListModel::ReadableAnswerListModel(const std::vector<Answer> &answers)
-    : AnswerListModel(answers)
+    : AnswerListModel(answers, false)
 {
 
 }
