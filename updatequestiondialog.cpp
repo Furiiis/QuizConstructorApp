@@ -14,8 +14,11 @@ UpdateQuestionDialog::~UpdateQuestionDialog()
 
 }
 
-void UpdateQuestionDialog::UpdateQuestionToDb() const {
+void UpdateQuestionDialog::UpdateQuestionToDb() {
     DatabaseManager::instance().updateQuestion(Question{ui->questionNumberLabel->text().toInt(), ui->questionTextEdit->toPlainText(),
+                                      answers_->getAnswers(),ui->descriptionTextEdit->toPlainText(),
+                                      ui->sourceTextEdit->toPlainText(), tagsDialog->GetSelectedTags()});
+    emit QuestionDataChanged(Question{ui->questionNumberLabel->text().toInt(), ui->questionTextEdit->toPlainText(),
                                       answers_->getAnswers(),ui->descriptionTextEdit->toPlainText(),
                                       ui->sourceTextEdit->toPlainText(), tagsDialog->GetSelectedTags()});
 }

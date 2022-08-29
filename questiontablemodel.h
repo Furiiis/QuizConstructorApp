@@ -20,16 +20,13 @@ public:
     int columnCount(const QModelIndex &parent) const override;
     QVariant data(const QModelIndex &index, int role) const override;
     QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
+    bool setData(const QModelIndex &index, const QVariant &value, int role);
+    bool insertRows(int row, int count, const QModelIndex &parent) override;
+    bool removeRows(int row, int count, const QModelIndex &parent) override;
     Question GetQuestion(const QModelIndex &index) const;
 
 private:
     std::vector<Question> _questions;
-
-
-
-    // QAbstractItemModel interface
-public:
-    bool setData(const QModelIndex &index, const QVariant &value, int role);
 };
 
 #endif // QUESTIONTABLEMODEL_H

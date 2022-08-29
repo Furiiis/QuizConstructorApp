@@ -16,7 +16,9 @@ public:
     ~UpdateQuestionDialog();
 
 public slots:
-    void UpdateQuestionToDb() const;
+    void UpdateQuestionToDb();
+signals:
+    void QuestionDataChanged(const Question& question);
 };
 
 #endif // UPDATEQUESTIONDIALOG_H

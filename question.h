@@ -23,4 +23,6 @@ struct Question
     std::vector<Tag> tags_;
 };
 
+Q_DECLARE_METATYPE(Question);
+
 #endif // QUESTION_H

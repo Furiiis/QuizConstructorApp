@@ -61,5 +61,22 @@ Question QuestionTableModel::GetQuestion(const QModelIndex &index) const
 
 bool QuestionTableModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
+    if(index.isValid() && role == Qt::EditRole)
+    {
+        _questions[index.row()] = value.value<Question>();
+        emit dataChanged(index, index);
+        return true;
+    }
+    return false;
+}
+
+
+bool QuestionTableModel::insertRows(int row, int count, const QModelIndex &parent)
+{
+
+}
+
+bool QuestionTableModel::removeRows(int row, int count, const QModelIndex &parent)
+{
 
 }

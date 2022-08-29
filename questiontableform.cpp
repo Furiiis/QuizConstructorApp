@@ -13,6 +13,7 @@ QuestionTableForm::QuestionTableForm(QWidget *parent) :
     ui->tableView->setModel(question_model);
     ui->tableView->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(ui->tableView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(EditQuestion()));
+//    connect(ui->);
     connect(ui->tableView, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(ContexMenuRequested(QPoint)));
 }
 
@@ -42,14 +43,15 @@ void QuestionTableForm::EditQuestion()
     UpdateQuestionDialog *updateDialog = new UpdateQuestionDialog(
                 question_model->GetQuestion(ui->tableView->selectionModel()->currentIndex()));
 
-    connect(updateDialog, SIGNAL(signalReady()), this, SLOT(slotUpdateModels()));
-
+    connect(updateDialog, &UpdateQuestionDialog::QuestionDataChanged, [&](const Question& question)
+    {
+        question_model->setData(index, QVariant::fromValue<Question>(question), Qt::EditRole);
+    });
     /* Выполняем запуск диалогового окна
      * */
     updateDialog->exec();
 
-    emit ui->tableView->model()->dataChanged(ui->tableView->model()->index(index.row() - 1, 0),
-                                    ui->tableView->model()->index(index.row() - 1, 3));
+    //шлее 137(158)
 }
 
 void QuestionTableForm::RemoveQuestion()
