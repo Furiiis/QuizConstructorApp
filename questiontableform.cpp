@@ -13,7 +13,9 @@ QuestionTableForm::QuestionTableForm(QWidget *parent) :
     ui->tableView->setModel(question_model);
     ui->tableView->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(ui->tableView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(EditQuestion()));
-//    connect(ui->);
+    connect(ui->updatePushButton, SIGNAL(clicked()), this, SLOT(UpdateModel()));
+    connect(ui->deletePushButton, SIGNAL(clicked()), this, SLOT(RemoveQuestion()));
+    connect(ui->addPushButton, SIGNAL(clicked()), this, SLOT(AddQuestion()));
     connect(ui->tableView, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(ContexMenuRequested(QPoint)));
 }
 
@@ -29,7 +31,8 @@ void QuestionTableForm::Back() const
 
 void QuestionTableForm::UpdateModel()
 {
-
+    question_model = new QuestionTableModel(DatabaseManager::instance().getAllQuestions());
+    ui->tableView->setModel(question_model);
 }
 
 void QuestionTableForm::EditQuestion()
@@ -50,25 +53,39 @@ void QuestionTableForm::EditQuestion()
     /* Выполняем запуск диалогового окна
      * */
     updateDialog->exec();
+}
 
-    //шлее 137(158)
+void QuestionTableForm::AddQuestion()
+{
+    AddQuestionDialog *addDialog = new AddQuestionDialog();
+
+    connect(addDialog, &AddQuestionDialog::QuestionAdded, [&](const Question& question)
+    {
+//          ui->tableView->model()->insertRow(question_model->rowCount(QModelIndex())-1);
+//          question_model->setData(question_model->index(ui->tableView->model()->rowCount() - 1, 1),
+//                                        QVariant::fromValue<Question>(question), Qt::EditRole);
+          question_model->addQuestion(question);
+    });
+
+    addDialog->exec();
 }
 
 void QuestionTableForm::RemoveQuestion()
 {
     /* Выясняем, какая из строк была выбрана
          * */
-    int row = ui->tableView->selectionModel()->currentIndex().row();
+    int selected_row = ui->tableView->selectionModel()->currentIndex().row();
+    int selected_questions_count = ui->tableView->selectionModel()->selectedRows().size();
     /* Проверяем, что строка была действительно выбрана
      * */
-    if(row >= 0){
+    if(selected_row >= 0){
         /* Задаём вопрос, стоит ли действительно удалять запись.
          * При положительном ответе удаляем запись
          * */
         if (QMessageBox::warning(this,
                                  trUtf8("Удаление вопроса"),
                                  trUtf8("Вы уверены, что хотите удалить этот вопрос?"),
-                                 QMessageBox::Yes | QMessageBox::No) == QMessageBox::No)
+                                 QMessageBox::No | QMessageBox::Yes) == QMessageBox::No)
         {
             /* При отрицательном ответе делаем откат действий
              * и закрываем диалог без удаления записи
@@ -88,10 +105,7 @@ void QuestionTableForm::RemoveQuestion()
 //            modelDevice->select();
 //            ui->deviceTableView->setCurrentIndex(modelDevice->index(-1, -1));
             DatabaseManager::instance().deleteQuestion(question_model->GetQuestion(ui->tableView->selectionModel()->currentIndex()).number_);
-            question_model->removeRow(row);
-
-//            question_model->select();
-            ui->tableView->setCurrentIndex(question_model->index(-1, -1));
+            question_model->removeRows(selected_row, selected_questions_count, QModelIndex());
         }
 }
 }

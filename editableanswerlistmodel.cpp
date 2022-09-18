@@ -71,7 +71,8 @@ bool EditableAnswerListModel::setData(const QModelIndex & index, const QVariant 
 
 bool EditableAnswerListModel::removeRows(int row, int count, const QModelIndex &parent)
 {
-    if(answers_.empty()) return false;
+    if(answers_.empty())
+        return false;
     if(answers_.erase(answers_.begin() + row) == answers_.end())
         return false;
     return true;
@@ -79,5 +80,10 @@ bool EditableAnswerListModel::removeRows(int row, int count, const QModelIndex &
 
 bool EditableAnswerListModel::insertRows(int row, int count, const QModelIndex &parent)
 {
-    answers_.insert(answers_.begin() + row + 1, {Answer(), Qt::Unchecked});
+    if(answers_.empty())
+        answers_.push_back({Answer(), Qt::Unchecked});
+    else
+        answers_.insert(answers_.begin() + row + 1, {Answer(), Qt::Unchecked});
+
+    return true;
 }

@@ -4,6 +4,7 @@
 #include <QWidget>
 #include <QMenu>
 #include "questiontablemodel.h"
+#include "addquestiondialog.h"
 #include "databasemanager.h"
 
 namespace Ui {
@@ -23,6 +24,7 @@ public slots:
     void UpdateModel();
     void EditQuestion();
     void RemoveQuestion();
+    void AddQuestion();
     void ContexMenuRequested(QPoint pos);
 
 private:

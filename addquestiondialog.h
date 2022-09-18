@@ -14,7 +14,9 @@ public:
     explicit AddQuestionDialog(QWidget *parent = nullptr);
 
 public slots:
-    void addQuestionToDb() const;
+    void addQuestionToDb();
+signals:
+    void QuestionAdded(const Question& question);
 };
 
 #endif // ADDQUESTIONDIALOG_H

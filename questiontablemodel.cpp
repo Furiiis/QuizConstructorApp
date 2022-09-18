@@ -73,10 +73,27 @@ bool QuestionTableModel::setData(const QModelIndex &index, const QVariant &value
 
 bool QuestionTableModel::insertRows(int row, int count, const QModelIndex &parent)
 {
+    beginInsertRows(parent, row+1, row + count);
+    if(_questions.empty())
+        _questions.push_back(Question());
+    else
+        _questions.insert(_questions.begin() + row + 1, Question());
 
+    endInsertRows();
+    return true;
 }
 
 bool QuestionTableModel::removeRows(int row, int count, const QModelIndex &parent)
 {
+    beginRemoveRows(QModelIndex(), row, row + count - 1);
+    _questions.erase(_questions.begin() + row, _questions.begin() + row + count);
+    endRemoveRows();
+    return true;
+}
 
+void QuestionTableModel::addQuestion(const Question &question)
+{
+    beginInsertRows(QModelIndex(), rowCount(QModelIndex()), rowCount(QModelIndex()));
+    _questions.push_back(question);
+    endInsertRows();
 }

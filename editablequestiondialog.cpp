@@ -36,12 +36,19 @@ void EditableQuestionDialog::removeAnswersListRows()
 
 void EditableQuestionDialog::addAnswersListRows()
 {
-    QModelIndex index = ui->listView->selectionModel()->currentIndex();
-    if(ui->listView->selectionModel()->selectedIndexes().size() == 0)
-//        ui->listView->model()->insertRow(ui->listView->model()->rowCount() - 1, index.parent());
-        ui->listView->model()->insertRow(index.row()+1, index.parent());
+    QModelIndex selected_index = ui->listView->selectionModel()->currentIndex();
+    int rows_count = ui->listView->model()->rowCount();
+
+    if(rows_count == 0)
+    {
+        ui->listView->model()->insertRow(0);
+    }
+    else if(selected_index.row() == -1)
+    {
+        ui->listView->model()->insertRow(rows_count - 1);
+    }
     else
-        ui->listView->model()->insertRow(index.row(), index.parent());
+        ui->listView->model()->insertRow(selected_index.row());
 }
 
 void EditableQuestionDialog::CreateTagsDialog()

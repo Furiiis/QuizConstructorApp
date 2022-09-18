@@ -8,10 +8,14 @@ AddQuestionDialog::AddQuestionDialog(QWidget *parent) :
             this, SLOT(addQuestionToDb()));
 }
 
-void AddQuestionDialog::addQuestionToDb() const
+void AddQuestionDialog::addQuestionToDb()
 {
         DatabaseManager::instance().addQuestion(Question{NULL,
               ui->questionTextEdit->toPlainText(), answers_->getAnswers(),
               ui->descriptionTextEdit->toPlainText(), ui->sourceTextEdit->toPlainText(),
               tagsDialog->GetSelectedTags()});
+        emit QuestionAdded(Question{NULL,
+                                    ui->questionTextEdit->toPlainText(), answers_->getAnswers(),
+                                    ui->descriptionTextEdit->toPlainText(), ui->sourceTextEdit->toPlainText(),
+                                    tagsDialog->GetSelectedTags()});
 }
