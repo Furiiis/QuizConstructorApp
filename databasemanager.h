@@ -28,6 +28,7 @@ public:
     std::vector<Answer> getAnswers(const int id);
     void addQuestion(const Question& question);
     void deleteQuestion(const int question_id);
+    void deleteQuestions(const std::vector<int>& question_id);
     void updateQuestion(const Question& question);
     std::vector<Tag> getAllTags();
     std::vector<Tag> getQuestionTags(const int question_id);

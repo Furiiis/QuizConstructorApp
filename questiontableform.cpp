@@ -68,46 +68,39 @@ void QuestionTableForm::AddQuestion()
     });
 
     addDialog->exec();
+
+    this->UpdateModel();
 }
 
 void QuestionTableForm::RemoveQuestion()
 {
     /* Выясняем, какая из строк была выбрана
          * */
-    int selected_row = ui->tableView->selectionModel()->currentIndex().row();
-    int selected_questions_count = ui->tableView->selectionModel()->selectedRows().size();
-    /* Проверяем, что строка была действительно выбрана
-     * */
-    if(selected_row >= 0){
-        /* Задаём вопрос, стоит ли действительно удалять запись.
-         * При положительном ответе удаляем запись
-         * */
-        if (QMessageBox::warning(this,
-                                 trUtf8("Удаление вопроса"),
-                                 trUtf8("Вы уверены, что хотите удалить этот вопрос?"),
-                                 QMessageBox::No | QMessageBox::Yes) == QMessageBox::No)
+    QModelIndexList selected_indexes = ui->tableView->selectionModel()->selectedIndexes();
+    qSort(selected_indexes);
+    std::vector<int> question_indexes;
+    QModelIndexList selected_rows;
+    for(const auto & index : selected_indexes)
+    {
+        if(selected_rows.empty() || (selected_rows.back().row() != index.row()))
         {
-            /* При отрицательном ответе делаем откат действий
-             * и закрываем диалог без удаления записи
-             * */
-           // QSqlDatabase::database().rollback();
-            return;
-        } else {
-            /* В противном случае производим удаление записи.
-             * При успешном удалении обновляем таблицу.
-             * */
-//            if(!modelDevice->removeRow(row)){
-//                QMessageBox::warning(this,trUtf8("Уведомление"),
-//                                     trUtf8("Не удалось удалить запись\n"
-//                                            "Возможно она используется другими таблицами\n"
-//                                            "Проверьте все зависимости и повторите попытку"));
-//            }
-//            modelDevice->select();
-//            ui->deviceTableView->setCurrentIndex(modelDevice->index(-1, -1));
-            DatabaseManager::instance().deleteQuestion(question_model->GetQuestion(ui->tableView->selectionModel()->currentIndex()).number_);
-            question_model->removeRows(selected_row, selected_questions_count, QModelIndex());
+            selected_rows.push_back(index);
+            question_indexes.push_back(question_model->GetQuestion(index).number_);
         }
-}
+    }
+
+//    int selected_row = ui->tableView->selectionModel()->currentIndex().row();
+    if (QMessageBox::warning(this,
+                             trUtf8("Удаление вопроса"),
+                             trUtf8("Вы уверены, что хотите удалить этот вопрос?"),
+                             QMessageBox::No | QMessageBox::Yes) == QMessageBox::No)
+    {
+        return;
+    } else {
+        DatabaseManager::instance().deleteQuestions(question_indexes);
+        question_model->removeMultipleRows(selected_rows, QModelIndex());
+    }
+
 }
 
 void QuestionTableForm::ContexMenuRequested(QPoint pos)

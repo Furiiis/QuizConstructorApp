@@ -91,6 +91,27 @@ bool QuestionTableModel::removeRows(int row, int count, const QModelIndex &paren
     return true;
 }
 
+bool QuestionTableModel::removeMultipleRows(const QModelIndexList &rows_indexes,  const QModelIndex &parent)
+{
+    int indexes_to_delete = 0;
+
+    for(int i = rows_indexes.size() - 1; i >= 0; --i)
+    {
+        if(i == 0 || rows_indexes.at(i) != rows_indexes.at(i - 1))
+        {
+            removeRows(rows_indexes.at(i).row(), indexes_to_delete + 1, parent) == false
+                    ? return false : return true;
+
+        }
+        else
+        {
+            indexes_to_delete++;
+        }
+    }
+
+    return true;
+}
+
 void QuestionTableModel::addQuestion(const Question &question)
 {
     beginInsertRows(QModelIndex(), rowCount(QModelIndex()), rowCount(QModelIndex()));

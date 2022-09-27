@@ -233,6 +233,25 @@ void DatabaseManager::deleteQuestion(const int id)
     }
 }
 
+void DatabaseManager::deleteQuestions(const std::vector<int>& question_id)
+{
+    QSqlQuery l_query(m_db);
+
+    QStringList idstrings;
+    foreach(int id, question_id) {
+        idstrings << QString::number(id);
+    }
+
+    l_query.prepare(QString("DELETE FROM questions "
+                    "WHERE questionNumber IN (%1) ").arg(idstrings.join(" , ")));
+
+    if(!l_query.exec())
+    {
+       std::cerr << "DatabaseManager::deleteQuestions(const std::vector<int>& question_id)" << std::endl;
+       return;
+    }
+}
+
 void DatabaseManager::updateQuestion(const Question &question)
 {
     QSqlQuery l_query(m_db);

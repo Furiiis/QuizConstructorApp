@@ -23,6 +23,7 @@ public:
     bool setData(const QModelIndex &index, const QVariant &value, int role);
     bool insertRows(int row, int count, const QModelIndex &parent) override;
     bool removeRows(int row, int count, const QModelIndex &parent) override;
+    bool removeMultipleRows(const QModelIndexList& rows_indexes,  const QModelIndex &parent);
     void addQuestion(const Question& question);
     Question GetQuestion(const QModelIndex &index) const;
 
