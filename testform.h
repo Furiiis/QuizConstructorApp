@@ -20,7 +20,9 @@ public:
 public slots:
     void BackToMenu() const;
     void NextQuestion();
-    void CheckQuestionState() const;
+
+private slots:
+    void EnableNextButton() const;
 
 private:
     bool IsNextQuestionLast() const; //RENAME
@@ -29,7 +31,8 @@ private:
     Ui::TestForm *ui;
     TestWindowForm* questionWidget;
     TestSessionData _sessionData;
-    std::vector<Question>::iterator current_question = _sessionData.questions.begin();
+    //std::vector<Question>::iterator current_question = _sessionData.questions.begin();
+    int current_question_index = 0;
 };
 
 #endif // TESTFORM_H

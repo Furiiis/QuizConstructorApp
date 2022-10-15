@@ -45,6 +45,12 @@ TestWindowForm::~TestWindowForm()
 void TestWindowForm::CheckAnswers()
 {
     answers_model->changeState();
+//    ui->answerListView->selectionModel()->clearSelection();
+/*    ui->answerListView->selectionModel()->selectedIndexes().clear();
+    ui->answerListView->selectionModel()->deleteLater();
+    ui->answerListView->selectAll();
+    ui->answerListView->clearSelection();*/
+
     SignalFromCheckButton();
 }
 

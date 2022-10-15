@@ -3,6 +3,7 @@
 #include "databasemanager.h"
 #include "ui_qt_stackwidget.h"
 #include "menuform.h"
+#include "form.h"
 
 Qt_StackWidget &Qt_StackWidget::instance()
 {
@@ -26,6 +27,9 @@ Qt_StackWidget::Qt_StackWidget(QWidget *parent) : QMainWindow(parent)
 //       QObject::connect(stack, SIGNAL(currentChanged(int)),this, SLOT(activeWidgetChanged(int)));
 //       stack->addWidget(new Homewidget(stack));
     setCentralWidget(stack);
+
+
+    addCurrentWidget(new Form());
 }
 
 void Qt_StackWidget::addCurrentWidget(QWidget *widget)

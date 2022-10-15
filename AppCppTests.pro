@@ -29,7 +29,9 @@ SOURCES += \
     testpagemodel.cpp \
     testsessiondata.cpp \
     testwindowform.cpp \
-    updatequestiondialog.cpp
+    updatequestiondialog.cpp \
+    tagsdelegate.cpp \
+    form.cpp
 
 HEADERS += \
     addquestiondialog.h \
@@ -52,7 +54,9 @@ HEADERS += \
     testpagemodel.h \
     testsessiondata.h \
     testwindowform.h \
-    updatequestiondialog.h
+    updatequestiondialog.h \
+    tagsdelegate.h \
+    form.h
 
 FORMS += \
     editablequestiondialog.ui \
@@ -62,7 +66,8 @@ FORMS += \
     tagsfilterdialog.ui \
     testfilterdialog.ui \
     testform.ui \
-    testwindowform.ui
+    testwindowform.ui \
+    form.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

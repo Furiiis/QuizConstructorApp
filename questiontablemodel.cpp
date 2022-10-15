@@ -18,7 +18,7 @@ int QuestionTableModel::rowCount(const QModelIndex &parent) const
 
 int QuestionTableModel::columnCount(const QModelIndex &parent) const
 {
-    return 4;
+    return 5;
 }
 
 QVariant QuestionTableModel::data(const QModelIndex &index, int role) const
@@ -35,6 +35,10 @@ QVariant QuestionTableModel::data(const QModelIndex &index, int role) const
         }  else if (index.column() == 3) {
             return _questions[index.row()].source_;
         }
+//          else if (index.column() == 4) {
+//            return
+//        }
+
         return QVariant();
 }
 
@@ -49,6 +53,8 @@ QVariant QuestionTableModel::headerData(int section, Qt::Orientation orientation
                 return QString("Description");
             } else if (section == 3) {
                 return QString("Source");
+            } else if (section == 4) {
+                return QString("Tags");
             }
         }
     return QVariant();
@@ -99,9 +105,10 @@ bool QuestionTableModel::removeMultipleRows(const QModelIndexList &rows_indexes,
     {
         if(i == 0 || rows_indexes.at(i) != rows_indexes.at(i - 1))
         {
-            removeRows(rows_indexes.at(i).row(), indexes_to_delete + 1, parent) == false
-                    ? return false : return true;
-
+            if( !removeRows(rows_indexes.at(i).row(), indexes_to_delete + 1, parent))
+            {
+                return false;
+            }
         }
         else
         {

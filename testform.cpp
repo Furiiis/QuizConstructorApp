@@ -7,10 +7,13 @@ TestForm::TestForm(const TestSessionData &sessionData, QWidget *parent) :
     _sessionData(sessionData)
 {
     ui->setupUi(this);
-    questionWidget = new TestWindowForm(this, *current_question);
+    questionWidget = new TestWindowForm(this, _sessionData.questions[current_question_index]);
+    //questionWidget = new TestWindowForm(this, *current_question);
     ui->verticalLayout->addWidget(questionWidget);
+    ui->questionsSizeLabel->setText(QString::number(_sessionData.questions.size()));
+    ui->currentNumberLabel->setText(QString::number(current_question_index + 1));
 
-    connect(questionWidget, SIGNAL(SignalFromCheckButton()), this, SLOT(CheckQuestionState()));
+    connect(questionWidget, SIGNAL(SignalFromCheckButton()), this, SLOT(EnableNextButton()));
     IsNextQuestionLast();
 }
 
@@ -27,7 +30,9 @@ void TestForm::BackToMenu() const
 void TestForm::NextQuestion()
 {
 
-    TestWindowForm* temp_question_widget = new TestWindowForm(this, *std::next(current_question));
+    //TestWindowForm* temp_question_widget = new TestWindowForm(this, *std::next(current_question));
+    TestWindowForm* temp_question_widget = new TestWindowForm(this,
+                                           _sessionData.questions[current_question_index + 1]);
 
 //    ui->verticalLayout->removeWidget(questionWidget);
 ////    questionWidget = temp_question_widget;
@@ -35,9 +40,10 @@ void TestForm::NextQuestion()
     std::swap(questionWidget, temp_question_widget);
     delete temp_question_widget;
     ui->verticalLayout->addWidget(questionWidget);
-    connect(questionWidget, SIGNAL(SignalFromCheckButton()), this, SLOT(CheckQuestionState()));
+    connect(questionWidget, SIGNAL(SignalFromCheckButton()), this, SLOT(EnableNextButton()));
 
-    current_question++;
+    ++current_question_index;
+    ui->currentNumberLabel->setText(QString::number(current_question_index+1));
 ////    questionWidget = temp_question_widget;
 ////    questionWidget->show();
 ////    questionWidget = temp_question_widget;
@@ -49,15 +55,15 @@ void TestForm::NextQuestion()
      IsNextQuestionLast();
 }
 
-void TestForm::CheckQuestionState() const
+void TestForm::EnableNextButton() const //RENAME
 {
-    if(IsNextQuestionLast()) return;
-    if(questionWidget->IsChecked()) ui->nextPushButton->setEnabled(true);
+    //if(questionWidget->IsChecked())
+    ui->nextPushButton->setEnabled(true);
 }
 
 bool TestForm::IsNextQuestionLast() const
 {
-    if(std::next(current_question) == _sessionData.questions.end())
+    if(current_question_index + 1 == _sessionData.questions.size())
     {
         ui->nextPushButton->setVisible(false);
         return true;

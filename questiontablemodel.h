@@ -29,6 +29,6 @@ public:
 
 private:
     std::vector<Question> _questions;
-};
+ };
 
 #endif // QUESTIONTABLEMODEL_H

@@ -2,6 +2,8 @@
 #include "updatequestiondialog.h"
 #include "ui_questiontableform.h"
 #include "qt_stackwidget.h"
+#include "tagsdelegate.h"
+
 #include <QMessageBox>
 
 QuestionTableForm::QuestionTableForm(QWidget *parent) :
@@ -11,6 +13,7 @@ QuestionTableForm::QuestionTableForm(QWidget *parent) :
     ui->setupUi(this);
     question_model = new QuestionTableModel(DatabaseManager::instance().getAllQuestions());
     ui->tableView->setModel(question_model);
+    ui->tableView->setItemDelegateForColumn(4, new TagsDelegate());
     ui->tableView->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(ui->tableView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(EditQuestion()));
     connect(ui->updatePushButton, SIGNAL(clicked()), this, SLOT(UpdateModel()));
